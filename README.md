@@ -98,6 +98,13 @@ To tackle the real-time synchronization challenge between Google Sheets and MySQ
 ### Video Demonstration
 [Embed your video showing the project working here]
 
+### Checklist
+- [x] My code's working just fine! 🥳
+- [ ] I have recorded a video showing it working and embedded it in the README ▶️
+- [x] I have tested all the normal working cases 😎
+- [ ] I have even solved some edge cases (brownie points) 💪
+- [x] I added my very planned-out approach to the problem at the end of this README 📜
+
 ### Final Notes
 The system currently handles real-time synchronization effectively with basic conflict resolution. Future enhancements may include more robust conflict handling and optimization for larger datasets and higher update frequencies.
 
