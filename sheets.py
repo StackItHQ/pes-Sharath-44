@@ -1,21 +1,24 @@
 # sheets.py
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+import os
 
-# Define the scope
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+# Load credentials and initialize Google Sheets API
+SERVICE_ACCOUNT_FILE = 'D:\SuperJoin\superjoin-435715-64f0c30e6e9f.json'
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
-# Authenticate using the service account key
-creds = ServiceAccountCredentials.from_json_keyfile_name('D:\SuperJoin\superjoin-435715-64f0c30e6e9f.json', scope)
-client = gspread.authorize(creds)
+creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+service = build('sheets', 'v4', credentials=creds)
 
-# Open the Google Sheet
-sheet = client.open('superjoin').sheet1
+SHEET_ID = 'superjoin'
+RANGE_NAME = 'Sheet1!A:C'
 
-# Read data from Google Sheets
 def read_sheet():
-    return sheet.get_all_records()
+    sheet = service.spreadsheets().values().get(spreadsheetId=SHEET_ID, range=RANGE_NAME).execute()
+    values = sheet.get('values', [])
+    keys = ['column1', 'column2', 'column3']
+    return [dict(zip(keys, row)) for row in values]
 
-# Write data to Google Sheets
-def write_sheet(values):
-    sheet.update('A1', values)
+def write_sheet(data):
+    body = {'values': data}
+    service.spreadsheets().values().update(spreadsheetId=SHEET_ID, range=RANGE_NAME, valueInputOption='RAW', body=body).execute()

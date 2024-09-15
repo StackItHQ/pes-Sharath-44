@@ -1,23 +1,44 @@
 # sync.py
-from sheets import read_sheet, write_sheet
-from db import read_db, insert_db
+import time
+from sheets import read_sheet
+from db import read_db, insert_db, update_db, delete_db
 
-# Synchronize data from Google Sheets to MySQL
 def sync_google_sheets_to_db():
     sheet_data = read_sheet()
-    for row in sheet_data:
-        insert_db(row.get('column1', ''), row.get('column2', ''), row.get('column3', ''))
+    db_data = read_db()
 
-# Synchronize data from MySQL to Google Sheets
+    # Convert sheet data to a set of tuples for comparison
+    sheet_data_set = set(tuple(record.values()) for record in sheet_data)
+    
+    # Convert database data to a set of tuples for comparison
+    db_data_set = set(tuple(record.values()) for record in db_data)
+
+    # Insert records from Google Sheets that are not in the database
+    for row in sheet_data:
+        record = (row.get('column1', ''), row.get('column2', ''), row.get('column3', ''))
+        if record not in db_data_set:
+            insert_db(*record)
+            print(f"Inserted record {record}")
+
+    # Optional: Sync database to Google Sheets
+    # sync_db_to_google_sheets()
+
 def sync_db_to_google_sheets():
     db_data = read_db()
-    # Convert database data to the format expected by Google Sheets
     sheet_data = [[row['column1'], row['column2'], row['column3']] for row in db_data]
     write_sheet(sheet_data)
 
 def main():
-    sync_google_sheets_to_db()
-    sync_db_to_google_sheets()
+    # Polling interval in seconds
+    polling_interval = 60
+
+    print("Starting synchronization...")
+
+    while True:
+        sync_google_sheets_to_db()
+        # Optional: Uncomment the following line if you want to sync DB to Sheets as well
+        # sync_db_to_google_sheets()
+        time.sleep(polling_interval)
 
 if __name__ == "__main__":
     main()
