@@ -1,24 +1,29 @@
-# sheets.py
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-import os
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
-# Load credentials and initialize Google Sheets API
-SERVICE_ACCOUNT_FILE = 'D:\SuperJoin\superjoin-435715-64f0c30e6e9f.json'
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+# Define the scope
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
-creds = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
-service = build('sheets', 'v4', credentials=creds)
+# Authenticate using the service account key
+creds = ServiceAccountCredentials.from_json_keyfile_name('D:\\SuperJoin\\superjoin-435715-64f0c30e6e9f.json', scope)
+client = gspread.authorize(creds)
 
-SHEET_ID = 'superjoin'
-RANGE_NAME = 'Sheet1!A:C'
+# Open the Google Sheet
+sheet = client.open('superjoin').sheet1
 
+# Read data from Google Sheets
 def read_sheet():
-    sheet = service.spreadsheets().values().get(spreadsheetId=SHEET_ID, range=RANGE_NAME).execute()
-    values = sheet.get('values', [])
-    keys = ['column1', 'column2', 'column3']
-    return [dict(zip(keys, row)) for row in values]
+    return sheet.get_all_records()
 
-def write_sheet(data):
-    body = {'values': data}
-    service.spreadsheets().values().update(spreadsheetId=SHEET_ID, range=RANGE_NAME, valueInputOption='RAW', body=body).execute()
+# Write data to Google Sheets
+def write_sheet(values):
+    sheet.update('A1', values)
+
+# Update a specific row in Google Sheets
+def update_sheet(row_index, values):
+    cell_range = f'A{row_index + 1}'  # Adjust cell range based on your needs
+    sheet.update(cell_range, values)
+
+# Delete a specific row from Google Sheets
+def delete_from_sheet(row_index):
+    sheet.delete_rows(row_index + 1)  # Google Sheets API is 1-based index
