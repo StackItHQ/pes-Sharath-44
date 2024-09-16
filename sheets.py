@@ -5,7 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
 # Authenticate using the service account key
-creds = ServiceAccountCredentials.from_json_keyfile_name('D:\\SuperJoin\\superjoin-435715-64f0c30e6e9f.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('D:\SuperJoin\superjoin-435715-64f0c30e6e9f.json', scope)
 client = gspread.authorize(creds)
 
 # Open the Google Sheet
@@ -21,9 +21,9 @@ def write_sheet(values):
 
 # Update a specific row in Google Sheets
 def update_sheet(row_index, values):
-    cell_range = f'A{row_index + 1}'  # Adjust cell range based on your needs
+    cell_range = f'A{row_index}'  # Adjust cell range based on your needs
     sheet.update(cell_range, values)
 
 # Delete a specific row from Google Sheets
 def delete_from_sheet(row_index):
-    sheet.delete_rows(row_index + 1)  # Google Sheets API is 1-based index
+    sheet.delete_rows(row_index)  # Google Sheets API is 1-based index
