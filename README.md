@@ -95,11 +95,11 @@ To tackle the real-time synchronization challenge between Google Sheets and MySQ
      - **Solution**: Carefully managed data formatting during the read and write operations to ensure compatibility between Google Sheets and MySQL.
 
 ### Video Demonstration
-[]
+[VideoLink](https://drive.google.com/file/d/1oUg525IJFca61MraMqTB7-9_nMPOZ2bv/view?usp=sharing)
 
 ### Checklist
 - [x] My code's working just fine! 🥳
-- [ ] I have recorded a video showing it working and embedded it in the README ▶️
+- [x] I have recorded a video showing it working and embedded it in the README ▶️
 - [x] I have tested all the normal working cases 😎
 - [ ] I have even solved some edge cases (brownie points) 💪
 - [x] I added my very planned-out approach to the problem at the end of this README 📜
