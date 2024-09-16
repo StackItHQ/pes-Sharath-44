@@ -95,7 +95,7 @@ To tackle the real-time synchronization challenge between Google Sheets and MySQ
      - **Solution**: Carefully managed data formatting during the read and write operations to ensure compatibility between Google Sheets and MySQL.
 
 ### Video Demonstration
-[Embed your video showing the project working here]
+[]
 
 ### Checklist
 - [x] My code's working just fine! 🥳
